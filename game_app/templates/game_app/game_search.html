@@ -1,0 +1,27 @@
+<h1>Fetch Page</h1>
+
+<hr />
+
+{% crispy form form.helper %}
+
+
+<!--<script>-->
+    <!--document.getElementById('fetch').addEventListener('click', function (e) {-->
+        <!--e.preventDefault();-->
+
+        <!--var xhr = new XMLHttpRequest();-->
+        <!--xhr.open('GET', '{% url "game_app:game_search" %}', false);-->
+        <!--xhr.setRequestHeader('Content-Type', 'application/json');-->
+        <!--xhr.onreadystatechange = function() {-->
+            <!--if (xhr.readyState === 4 && xhr.status === 200) {-->
+                <!--alert('DONE!')-->
+            <!--}-->
+        <!--};-->
+
+        <!--xhr.send();-->
+    <!--});-->
+<!--</script>-->
+
+<!--<br/>-->
+
+<!--<a href="{% url 'game_app:game-list' %}" class="btn btn-primary">See Game List!</a>-->
