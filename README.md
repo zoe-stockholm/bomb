@@ -30,5 +30,5 @@ Navigator to http://ec2-52-51-156-213.eu-west-1.compute.amazonaws.com:8000/
 
 You can login admin panel http://ec2-52-51-156-213.eu-west-1.compute.amazonaws.com:8000/admin
 
->username: admin
+>username: admin,
 >password: passpass
