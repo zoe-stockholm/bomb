@@ -22,17 +22,20 @@ class Platform(models.Model):
 
 class Game(models.Model):
     game_id = models.CharField(max_length=255, unique=True)
-    name = models.CharField(max_length=255, blank=True, null=True)
+    name = models.CharField(
+        max_length=255, blank=True, null=True, db_index=True)
     aliases = models.CharField(max_length=255, blank=True, null=True)
     api_detail_url = models.URLField(blank=True, null=True)
     giant_bomb_site_detail_url = models.URLField(blank=True, null=True)
     summary = models.TextField(blank=True, null=True)
     description = models.TextField(blank=True, null=True)
     number_of_user_reviews = models.IntegerField(default=0)
-    original_release_date = models.DateTimeField(blank=True, null=True)
+    original_release_date = models.DateTimeField(
+        blank=True, null=True, db_index=True)
     date_added = models.DateTimeField(blank=True, null=True)
     date_last_updated = models.DateTimeField(blank=True, null=True)
-    resource_type = models.CharField(max_length=255, blank=True, null=True)
+    resource_type = models.CharField(
+        max_length=255, blank=True, null=True, db_index=True)
     platforms = models.ManyToManyField(
         Platform, blank=True, related_name='game_platforms')
 
