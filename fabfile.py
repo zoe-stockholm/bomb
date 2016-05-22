@@ -13,22 +13,12 @@ PROJECT_PATH = '/media/files/projects/'
 VERSION = ''
 
 
-def prod():
-    """Sets the deploy environment.
-    """
-    env.hosts = ['']
-    env.user = 'ubuntu'
-    env.key_filename = '~/.ssh/------.pem'
-    env.PROJECT_NAME = PROJECT_NAME
-    env.environment = 'prod'
-
-
 def stage():
     """Sets the deploy environment.
     """
     env.hosts = ['ec2-52-51-156-213.eu-west-1.compute.amazonaws.com']
     env.user = 'ubuntu'
-    env.key_filename = '~/.ssh/standard.pem'
+    env.key_filename = '~/Dev/aws/pem/craft.pem'
     env.PROJECT_NAME = PROJECT_NAME
     env.environment = 'stage'
 
