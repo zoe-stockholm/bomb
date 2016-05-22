@@ -11,12 +11,14 @@ a django web app which can do resource(games) search by keywords and release yea
 Django 1.95, and Python 3.4
 
 ##Quick Start: Test on your local:
+
 ```$ git clone git@github.com:zoe-stockholm/bomb.git
 $ pip install --upgrade virtualenv
 $ virtualenv bomb
 $ source bomb/bin/activate
 ```
 go to your project root (bomb)
+
 ```$ pip install -r requirements.txt (bomb)
 $ python manage.py migrate (bomb)
 $ python manage.py runserver
@@ -27,5 +29,6 @@ $ python manage.py runserver
 Navigator to http://ec2-52-51-156-213.eu-west-1.compute.amazonaws.com:8000/
 
 You can login admin panel http://ec2-52-51-156-213.eu-west-1.compute.amazonaws.com:8000/admin
+
 >username: admin
 >password: passpass
