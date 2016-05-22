@@ -76,3 +76,9 @@ class GameSearchForm(forms.Form):
             games_list = queryset
 
         return games_list
+
+
+class AdminFetchForm(forms.Form):
+    keyword = forms.CharField(label=_('Keyword'), required=True)
+    resource_type = forms.CharField(
+        label=_('Type'), required=False, initial='game')

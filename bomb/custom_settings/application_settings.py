@@ -3,6 +3,9 @@ from bomb.settings import *
 gettext = lambda s: s
 _ = lambda s: s
 
+
+PAGINATOR_PER_PAGE = 10
+
 ######################### GIANTBOMB SETTINGS ################################
 
 GIANTBOMB_PUBLIC_API_BASE_URL = 'http://www.giantbomb.com/api/'

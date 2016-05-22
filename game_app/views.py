@@ -1,20 +1,18 @@
-import datetime
-import json
-
-from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from django.http import HttpResponse
+from django.conf import settings
+from django.http import HttpResponseRedirect
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.views import deprecate_current_app
-from django.shortcuts import render_to_response, redirect, resolve_url
+from django.shortcuts import render_to_response, render
 from django.template.response import TemplateResponse
-from django.views.generic import FormView, TemplateView, ListView
+from django.views.generic import FormView, ListView
 from django.core.urlresolvers import reverse
-from django.template import RequestContext, loader, Context
+from django.template import RequestContext
 from django.views.generic.edit import FormMixin
-
-from game_app.forms import GamesFetchForm, GameSearchForm
+from game_app.forms import GamesFetchForm, GameSearchForm, AdminFetchForm
 from game_app.models import Game
 from game_app.tasks import fetch_games_by_keywords
+from django.contrib import admin
+from django.contrib import messages
 
 
 class GamesFetchView(FormView):
@@ -59,7 +57,7 @@ game_search = FilteredGameView.as_view(
     form_class=GameSearchForm,
     template_name='game_app/game_search.html',
     queryset=Game.objects.all(),
-    paginate_by=10
+    paginate_by=settings.PAGINATOR_PER_PAGE
 )
 
 
@@ -75,3 +73,26 @@ def home(
         context.update(extra_context)
 
     return TemplateResponse(request, template_name, context)
+
+
+@admin.site.register_view('game_app/tasks/')
+def tasks(request):
+    return render_to_response(
+         "game_app/admin/task.html", RequestContext(request, {}), )
+
+
+def admin_fetch(request):
+    if request.method == 'POST':
+        form = AdminFetchForm(request.POST)
+        if form.is_valid():
+            keyword = request.POST.get('keyword')
+            resource_type = request.POST.get('resource_type')
+
+            fetch_games_by_keywords(keyword, resource_type, page=1)
+            messages.success(request, 'FETCH DONE!')
+
+            return HttpResponseRedirect('/admin/')
+    else:
+        form = GamesFetchForm()
+
+    return render(request, 'game_app/admin/task.html', {'form': form})

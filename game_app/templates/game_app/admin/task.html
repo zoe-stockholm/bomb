@@ -1,0 +1,15 @@
+{% extends "admin/base_site.html" %}
+{% load staticfiles %}
+
+
+{% block content %}
+Here you can fetch resources from Giant Bomb API depending on your keywords and types <br>
+
+<form action="{% url 'game_app:admin-fetch' %}" method="post">
+    {% csrf_token %}
+    Keywords:<br><input type="text" name="keyword"><br>
+    Resource Type:<br><input type="text" name="resource_type" value="game"><br>
+    <input type="submit" value="Fetch" id="fetch">
+</form>
+
+{% endblock %}
