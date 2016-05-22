@@ -24,7 +24,7 @@ class Game(models.Model):
     game_id = models.CharField(max_length=255, unique=True)
     name = models.CharField(
         max_length=255, blank=True, null=True, db_index=True)
-    aliases = models.CharField(max_length=255, blank=True, null=True)
+    aliases = models.TextField(blank=True, null=True)
     api_detail_url = models.URLField(blank=True, null=True)
     giant_bomb_site_detail_url = models.URLField(blank=True, null=True)
     summary = models.TextField(blank=True, null=True)
