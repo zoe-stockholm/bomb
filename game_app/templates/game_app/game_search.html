@@ -8,13 +8,11 @@
     <button type="submit" name="page" value="1">{% trans 'Search' %}</button>
 </form>
 
-
 {% if form.cleaned_data and not form.errors %}
 <div class="results">
     {% include 'game_app/game_result.html' %}
 </div>
 {% endif %}
-
 
 <hr />
 <a href="{% url 'game_app:home' %}">Back Home</a>
