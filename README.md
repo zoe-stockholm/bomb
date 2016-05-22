@@ -11,15 +11,15 @@ a django web app which can do resource(games) search by keywords and release yea
 Django 1.95, and Python 3.4
 
 ##Quick Start: Test on your local:
-
-```$ git clone git@github.com:zoe-stockholm/bomb.git
+```
+$ git clone git@github.com:zoe-stockholm/bomb.git
 $ pip install --upgrade virtualenv
 $ virtualenv bomb
 $ source bomb/bin/activate
 ```
 go to your project root (bomb)
-
-```$ pip install -r requirements.txt (bomb)
+```
+$ pip install -r requirements.txt (bomb)
 $ python manage.py migrate (bomb)
 $ python manage.py runserver
 ```
