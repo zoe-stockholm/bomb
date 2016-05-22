@@ -3,7 +3,7 @@
 
 
 {% block content %}
-Here you can fetch resources from Giant Bomb API depending on your keywords and types <br>
+Here you can fetch resources from Giant Bomb API depending on your keywords and types <br><br>
 
 <form action="{% url 'game_app:admin-fetch' %}" method="post">
     {% csrf_token %}

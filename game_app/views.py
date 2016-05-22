@@ -8,7 +8,7 @@ from django.views.generic import FormView, ListView
 from django.core.urlresolvers import reverse
 from django.template import RequestContext
 from django.views.generic.edit import FormMixin
-from game_app.forms import GamesFetchForm, GameSearchForm, AdminFetchForm
+from game_app.forms import GamesFetchForm, GameSearchForm
 from game_app.models import Game
 from game_app.tasks import fetch_games_by_keywords
 from django.contrib import admin
@@ -20,7 +20,7 @@ class GamesFetchView(FormView):
     form_class = GamesFetchForm
 
     def get_success_url(self):
-        return reverse('game_app:home')
+        return reverse('game_app:fetch-done')
 
     def post(self, request, *args, **kwargs):
         form = self.form_class(request.POST)
@@ -28,7 +28,6 @@ class GamesFetchView(FormView):
             keyword = form.cleaned_data.get('keyword')
             resource_type = form.cleaned_data.get('resource_type')
             fetch_games_by_keywords(keyword, resource_type)
-            messages.success(request, 'FETCH DONE!')
             return self.form_valid(form)
         return self.form_invalid(form)
 
@@ -84,16 +83,26 @@ def tasks(request):
 
 def admin_fetch(request):
     if request.method == 'POST':
-        form = AdminFetchForm(request.POST)
+        form = GamesFetchForm(request.POST)
         if form.is_valid():
             keyword = request.POST.get('keyword')
             resource_type = request.POST.get('resource_type')
-
             fetch_games_by_keywords(keyword, resource_type)
             messages.success(request, 'FETCH DONE!')
-
             return HttpResponseRedirect('/admin/')
     else:
         form = GamesFetchForm()
-
     return render(request, 'game_app/admin/task.html', {'form': form})
+
+
+@deprecate_current_app
+def fetch_done(request,
+               template_name='game_app/game_fetch_done.html',
+               extra_context=None):
+    context = {
+        'title': _('Fetch task done!')}
+    if extra_context is not None:
+        context.update(extra_context)
+    return TemplateResponse(request, template_name, context)
+
+
