@@ -26,7 +26,7 @@ class Game(models.Model):
     aliases = models.CharField(max_length=255, blank=True, null=True)
     api_detail_url = models.URLField(blank=True, null=True)
     giant_bomb_site_detail_url = models.URLField(blank=True, null=True)
-    summary = models.CharField(max_length=255, blank=True, null=True)
+    summary = models.TextField(blank=True, null=True)
     description = models.TextField(blank=True, null=True)
     number_of_user_reviews = models.IntegerField(default=0)
     original_release_date = models.DateTimeField(blank=True, null=True)
