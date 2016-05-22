@@ -1,0 +1,26 @@
+[defaults]
+base_dir = /var/www/%(project)
+
+chdir           = %(base_dir)/%(project)
+module          = %(project).wsgi:application
+pp              = %(base_dir)
+home            = /home/ubuntu/.venv/%(project)
+
+# logto           = %(base_dir)/logs/uwsgi.log
+log-syslog      = %(project)_stage
+master          = True
+# master-as-root  = True
+max-requests    = 10000
+vaccum          = true
+enable-threads  = true
+heartbeat       = 10
+lazy-apps       = true
+# cheaper         = 1
+processes       = 2
+threads         = %k
+
+
+
+uid = www-data
+gid = www-data
+socket = 127.0.0.1:0

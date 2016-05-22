@@ -78,9 +78,9 @@ def initial_setup():
 
     #install uwsgi system wide
     sudo('pip3 install uwsgi')
-    sudo('npm install -g bower')
+    # sudo('npm install -g bower')
     # run('npm install grunt')
-    sudo('npm install -g grunt-cli')
+    # sudo('npm install -g grunt-cli')
 
     #restart services
     sudo('service nginx restart')
@@ -142,9 +142,9 @@ def deploy(version):
         run('ln -sfn {} {}'.format(PROJECT_PATH+PROJECT_NAME+'/bower_components', cur_version_path+'/'))
 
         # install all the requirements
-        run('npm install')
-        run('bower install')
-        run('grunt --force')
+        # run('npm install')
+        # run('bower install')
+        # run('grunt --force')
 
     if files.exists('/tmp/{}_celery.pid'.format(PROJECT_NAME)):
         with settings(warn_only=True):
@@ -159,13 +159,13 @@ def deploy(version):
         run('virtualenv -p /usr/bin/python3.4 {}'.format('~/.venv/'+PROJECT_NAME))
 
     # Take the media folder out of the project, and symlink it
-    if not files.exists(PROJECT_PATH+PROJECT_NAME+'/media'):
-        sudo('mkdir -p {}'.format(PROJECT_PATH+PROJECT_NAME+'/media'))
-        sudo('chown -R www-data. {}'.format(PROJECT_PATH+PROJECT_NAME+'/media'))
+    # if not files.exists(PROJECT_PATH+PROJECT_NAME+'/media'):
+    #     sudo('mkdir -p {}'.format(PROJECT_PATH+PROJECT_NAME+'/media'))
+    #     sudo('chown -R www-data. {}'.format(PROJECT_PATH+PROJECT_NAME+'/media'))
 
-    sudo('ln -sfn {} {}'.format(PROJECT_PATH+PROJECT_NAME+'/media', cur_version_path+'/'))
-    sudo('chown -R www-data. {}'.format(cur_version_path+'/media'))
-    sudo('chown -R www-data. {}'.format(PROJECT_PATH + PROJECT_NAME + '/media'))
+    # sudo('ln -sfn {} {}'.format(PROJECT_PATH+PROJECT_NAME+'/media', cur_version_path+'/'))
+    # sudo('chown -R www-data. {}'.format(cur_version_path+'/media'))
+    # sudo('chown -R www-data. {}'.format(PROJECT_PATH + PROJECT_NAME + '/media'))
 
     with prefix('source {}'.format('~/.venv/'+PROJECT_NAME+'/bin/activate')):
         with cd(cur_version_path):
