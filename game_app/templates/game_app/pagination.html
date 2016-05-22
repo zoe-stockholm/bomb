@@ -1,0 +1,30 @@
+<ul class="pagination">
+  <li>
+    <button
+      form="{{ form_target }}"
+      {% if page_obj.has_previous %}
+        name="page"
+        value="{{ page_obj.previous_page_number }}"
+        type="submit"
+      {% else %}
+        disabled="disabled"
+      {% endif %}>
+      prev
+    </button>
+  </li>
+
+
+  <li>
+    <button
+      form="{{ form_target }}"
+      {% if page_obj.has_next %}
+        name="page"
+        value="{{ page_obj.next_page_number }}"
+        type="submit"
+      {% else %}
+        disabled="disabled"
+      {% endif %}>
+      next
+    </button>
+  </li>
+</ul>

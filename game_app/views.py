@@ -1,18 +1,28 @@
 import datetime
-from django.shortcuts import render_to_response
-from django.views.generic import FormView, ListView
+import json
+
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.http import HttpResponse
+from django.utils.translation import ugettext_lazy as _
+from django.contrib.auth.views import deprecate_current_app
+from django.shortcuts import render_to_response, redirect, resolve_url
+from django.template.response import TemplateResponse
+from django.views.generic import FormView, TemplateView, ListView
 from django.core.urlresolvers import reverse
-from game_app.forms import GamesSearchForm, GameFilterForm
+from django.template import RequestContext, loader, Context
+from django.views.generic.edit import FormMixin
+
+from game_app.forms import GamesFetchForm, GameSearchForm
 from game_app.models import Game
 from game_app.tasks import fetch_games_by_keywords
 
 
-class GamesSearchView(FormView):
-    template_name = 'game_app/game_search.html'
-    form_class = GamesSearchForm
+class GamesFetchView(FormView):
+    template_name = 'game_app/game_fetch.html'
+    form_class = GamesFetchForm
 
     def get_success_url(self):
-        return reverse('game_app:game-filter')
+        return reverse('game_app:home')
 
     def post(self, request, *args, **kwargs):
         form = self.form_class(request.POST)
@@ -24,31 +34,44 @@ class GamesSearchView(FormView):
         return self.form_invalid(form)
 
 
-class GamesFilterView(FormView):
-    template_name = 'game_app/game_filter.html'
-    form_class = GameFilterForm
+class FilteredGameView(FormMixin, ListView):
 
-    def form_valid(self, form):
-        release_year_from = form.cleaned_data.get('release_year_from')
-        release_year_to = form.cleaned_data.get('release_year_to')
+    def get_form_kwargs(self):
+        return {
+          'initial': self.get_initial(),
+          'prefix': self.get_prefix(),
+          'data': self.request.GET or None
+        }
 
-        # convert year from string to date
-        date_from = datetime.datetime.strptime(
-            release_year_from, '%Y').date() if release_year_from else None
-        date_to = datetime.datetime.strptime(
-            release_year_to, '%Y').date() if release_year_to else None
+    def get(self, request, *args, **kwargs):
+        self.object_list = self.get_queryset()
 
-        if date_from and date_to:
-            games = Game.objects.filter(
-                original_release_date__range=(date_from, date_to))
-        elif date_from:
-            games = Game.objects.filter(
-                original_release_date__gte=date_from)
-        elif date_to:
-            games = Game.objects.filter(
-                original_release_date__lte=date_to)
-        else:
-            games = Game.objects.all()
+        form = self.get_form(self.get_form_class())
 
-        return render_to_response('game_app/game_list.html', {'games': games})
+        if form.is_valid():
+            self.object_list = form.filter_queryset(request, self.object_list)
 
+        context = self.get_context_data(
+            form=form, object_list=self.object_list)
+        return self.render_to_response(context)
+
+game_search = FilteredGameView.as_view(
+    form_class=GameSearchForm,
+    template_name='game_app/game_search.html',
+    queryset=Game.objects.all(),
+    paginate_by=10
+)
+
+
+@deprecate_current_app
+def home(
+        request,
+        template_name='game_app/home.html',
+        extra_context=None):
+    context = {
+        'title': _('Home'),
+    }
+    if extra_context is not None:
+        context.update(extra_context)
+
+    return TemplateResponse(request, template_name, context)

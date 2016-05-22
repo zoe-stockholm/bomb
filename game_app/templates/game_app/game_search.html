@@ -1,27 +1,20 @@
-<h1>Fetch Page</h1>
+{% load crispy_forms_tags staticfiles i18n %}
+
+<form id="game-search" action="{% url 'game_app:game-search' %}">
+    Resource Type: <input name="{{ form.resource_type.html_name }}" value="{{ form.resource_type.value }}" type="search"> <br/>
+    Release Year From: <input name="{{ form.release_year_from.html_name }}" value="{{ form.release_year_from.value }}" type="search"> <br/>
+    Release Year To: <input name="{{ form.release_year_to.html_name }}" value="{{ form.release_year_to.value }}" type="search">
+
+    <button type="submit" name="page" value="1">{% trans 'Search' %}</button>
+</form>
+
+
+{% if form.cleaned_data and not form.errors %}
+<div class="results">
+    {% include 'game_app/game_result.html' %}
+</div>
+{% endif %}
+
 
 <hr />
-
-{% crispy form form.helper %}
-
-
-<!--<script>-->
-    <!--document.getElementById('fetch').addEventListener('click', function (e) {-->
-        <!--e.preventDefault();-->
-
-        <!--var xhr = new XMLHttpRequest();-->
-        <!--xhr.open('GET', '{% url "game_app:game_search" %}', false);-->
-        <!--xhr.setRequestHeader('Content-Type', 'application/json');-->
-        <!--xhr.onreadystatechange = function() {-->
-            <!--if (xhr.readyState === 4 && xhr.status === 200) {-->
-                <!--alert('DONE!')-->
-            <!--}-->
-        <!--};-->
-
-        <!--xhr.send();-->
-    <!--});-->
-<!--</script>-->
-
-<!--<br/>-->
-
-<!--<a href="{% url 'game_app:game-list' %}" class="btn btn-primary">See Game List!</a>-->
+<a href="{% url 'game_app:home' %}">Back Home</a>

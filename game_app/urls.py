@@ -1,10 +1,9 @@
 from django.conf.urls import url
-
-import game_app
-from game_app.views import GamesSearchView, GamesFilterView
+from game_app.views import GamesFetchView, home, game_search
 
 app_name = 'game_app'
 urlpatterns = [
-    url(r'^$', GamesSearchView.as_view(), name='game-search'),
-    url(r'^filter/$', GamesFilterView.as_view(), name='game-filter'),
+    url(r'^$', home, {'template_name': 'game_app/home.html'}, name='home'),
+    url(r'^fetch/$', GamesFetchView.as_view(), name='game-fetch'),
+    url(r'^search/$', game_search, name='game-search'),
 ]

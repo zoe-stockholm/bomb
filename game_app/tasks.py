@@ -10,13 +10,15 @@ logger = logging.getLogger(__name__)
 
 
 def fetch_games_by_keywords(keyword, resource_type):
-    response = requests.get(
-        '{}search/?api_key={}&format={}&query={}&resources={}'.format(
-            settings.GIANTBOMB_PUBLIC_API_BASE_URL,
-            settings.GIANTBOMB_PUBLIC_API_KEY,
-            settings.FORMAT,
-            keyword,
-            resource_type))
+    headers = {'User-Agent':
+                   'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36'}
+
+    response = requests.get(url='{}search/'.format(settings.GIANTBOMB_PUBLIC_API_BASE_URL),
+                            params={'api_key': settings.GIANTBOMB_PUBLIC_API_KEY,
+                                    'format': settings.FORMAT,
+                                    'query': keyword,
+                                    'resources': resource_type},
+                            headers=headers)
 
     if json.loads(response.text).get('status_code') != 1:
         logger.error(json.loads(response.text).get('error'))

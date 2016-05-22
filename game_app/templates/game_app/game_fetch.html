@@ -1,0 +1,10 @@
+{% load crispy_forms_tags staticfiles %}
+
+<h1>Fetch Page</h1>
+
+<hr />
+
+{% crispy form form.helper %}
+
+<hr />
+<a href="{% url 'game_app:home' %}">Back Home</a>

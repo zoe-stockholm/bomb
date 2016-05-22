@@ -52,14 +52,21 @@ class Game(models.Model):
         self.api_detail_url = dict_data.get('api_detail_url')
         self.giant_bomb_site_detail_url = dict_data.get('site_detail_url')
         self.summary = dict_data.get('deck')
-        self.description = remove_tags(dict_data('description'))
-        self.number_of_user_reviews = dict_data.get('number_of_user_reviews')
-        self.original_release_date = datetime.datetime.strptime(
-            dict_data.get('original_release_date'), '%Y-%m-%d %H:%M:%S').time()
-        self.date_added = datetime.datetime.strptime(
-            dict_data.get('date_added'), '%Y-%m-%d %H:%M:%S').time()
-        self.date_last_updated = datetime.datetime.strptime(
-            dict_data.get('date_last_updated'), '%Y-%m-%d %H:%M:%S').time()
+        self.description = remove_tags(dict_data.get('description'))
+
+        if dict_data.get('number_of_user_reviews'):
+            self.number_of_user_reviews = dict_data.get(
+                'number_of_user_reviews')
+
+        if dict_data.get('original_release_date'):
+            self.original_release_date = datetime.datetime.strptime(
+                dict_data.get('original_release_date'), '%Y-%m-%d %H:%M:%S')
+        if dict_data.get('date_added'):
+            self.date_added = datetime.datetime.strptime(
+                dict_data.get('date_added'), '%Y-%m-%d %H:%M:%S')
+        if dict_data.get('date_last_updated'):
+            self.date_last_updated = datetime.datetime.strptime(
+                dict_data.get('date_last_updated'), '%Y-%m-%d %H:%M:%S')
         self.resource_type = dict_data.get('resource_type')
         self.save()
 
@@ -85,9 +92,7 @@ class Game(models.Model):
 
 
 class Image(models.Model):
-    game = models.ForeignKey(
-        Game, models.SET_NULL, related_name='image_game')
-
+    game = models.ForeignKey(Game, related_name='image_game')
     url = models.URLField()
     title = models.CharField(max_length=255)
 

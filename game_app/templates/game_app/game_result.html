@@ -1,0 +1,14 @@
+{% load crispy_forms_tags staticfiles %}
+
+<h1>Result Page</h1>
+
+<hr />
+
+
+{% for object in object_list %}
+<li>
+    {{ object }} - {{ object.original_release_date|date:"Y"  }} - <a href="{{ object.giant_bomb_site_detail_url }}">Detail Link</a>
+</li>
+{% endfor %}
+
+{% include 'game_app/pagination.html' with form_target='game-search' %}
