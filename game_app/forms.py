@@ -8,7 +8,8 @@ from django.utils.translation import ugettext_lazy as _
 
 
 class GamesFetchForm(forms.Form):
-    keyword = forms.CharField(label=_('Keyword'), required=True)
+    keyword = forms.CharField(
+        label=_('Keyword'), required=True, initial='Quiz')
     resource_type = forms.CharField(
         label=_('Type'), required=False, initial='game')
 

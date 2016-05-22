@@ -28,6 +28,7 @@ class GamesFetchView(FormView):
             keyword = form.cleaned_data.get('keyword')
             resource_type = form.cleaned_data.get('resource_type')
             fetch_games_by_keywords(keyword, resource_type)
+            messages.success(request, 'FETCH DONE!')
             return self.form_valid(form)
         return self.form_invalid(form)
 
@@ -88,7 +89,7 @@ def admin_fetch(request):
             keyword = request.POST.get('keyword')
             resource_type = request.POST.get('resource_type')
 
-            fetch_games_by_keywords(keyword, resource_type, page=1)
+            fetch_games_by_keywords(keyword, resource_type)
             messages.success(request, 'FETCH DONE!')
 
             return HttpResponseRedirect('/admin/')
