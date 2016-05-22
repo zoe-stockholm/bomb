@@ -40,10 +40,18 @@ class GamesFetchForm(forms.Form):
 
 
 class GameSearchForm(forms.Form):
-    release_year_from = forms.CharField(
-        label=_('Release Year From'), required=False)
-    release_year_to = forms.CharField(
-        label=_('Release Year To'), required=False, initial='1999')
+    release_year_from = forms.IntegerField(
+        label=_('Release Year From'),
+        required=False,
+        initial=1900,
+        max_value=9999,
+        min_value=1800)
+    release_year_to = forms.IntegerField(
+        label=_('Release Year To'),
+        required=False,
+        initial=1999,
+        max_value=9999,
+        min_value=1800)
     resource_type = forms.CharField(
         label=_('Type'), required=False, initial='game')
 
@@ -56,12 +64,12 @@ class GameSearchForm(forms.Form):
 
         # convert year from string to date
         date_from = datetime.datetime.strptime(
-            release_year_from,
-            '%Y').date() if release_year_from != 'None' else None
+            str(release_year_from),
+            '%Y').date() if release_year_from else None
 
         date_to = datetime.datetime.strptime(
-            release_year_to,
-            '%Y').date() if release_year_to != 'None' else None
+            str(release_year_to),
+            '%Y').date() if release_year_to else None
 
         if date_from and date_to:
             games_list = queryset.filter(
