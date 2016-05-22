@@ -171,7 +171,7 @@ def deploy(version):
         with cd(cur_version_path):
             run('pip install -r {}'.format(cur_version_path+'/conf/requirements.txt'))
             # collect static
-            run('python manage.py collectstatic --settings={}.custom_settings.{}_settings --noinput'.format(PROJECT_NAME, env.environment))
+            #run('python manage.py collectstatic --settings={}.custom_settings.{}_settings --noinput'.format(PROJECT_NAME, env.environment))
 
     sudo('chown -R www-data. {}'.format(cur_version_path))
 
