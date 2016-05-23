@@ -22,18 +22,17 @@ class GamesFetchView(FormView):
     def get_success_url(self):
         return reverse('game_app:fetch-done')
 
-    def post(self, request, *args, **kwargs):
-        form = self.form_class(request.POST)
-        if form.is_valid():
-            keyword = form.cleaned_data.get('keyword')
-            resource_type = form.cleaned_data.get('resource_type')
-            fetch_games_by_keywords(keyword, resource_type)
-            return self.form_valid(form)
-        return self.form_invalid(form)
+    def form_valid(self, form):
+        keyword = form.cleaned_data.get('keyword')
+        resource_type = form.cleaned_data.get('resource_type')
+        num_result = fetch_games_by_keywords(keyword, resource_type)
+        return render_to_response(
+            'game_app/game_fetch_done.html',
+            {'num_result': num_result},
+            context_instance=RequestContext(self.request))
 
 
 class FilteredGameView(FormMixin, ListView):
-
     def get_form_kwargs(self):
         return {
           'initial': self.get_initial(),
@@ -45,12 +44,15 @@ class FilteredGameView(FormMixin, ListView):
         self.object_list = self.get_queryset()
 
         form = self.get_form(self.get_form_class())
+        num_result = 0
 
         if form.is_valid():
             self.object_list = form.filter_queryset(request, self.object_list)
+            num_result = len(self.object_list)
 
         context = self.get_context_data(
             form=form, object_list=self.object_list)
+        context['num_result'] = num_result
         return self.render_to_response(context)
 
 game_search = FilteredGameView.as_view(
@@ -87,8 +89,9 @@ def admin_fetch(request):
         if form.is_valid():
             keyword = request.POST.get('keyword')
             resource_type = request.POST.get('resource_type')
-            fetch_games_by_keywords(keyword, resource_type)
-            messages.success(request, 'FETCH DONE!')
+            num_result = fetch_games_by_keywords(keyword, resource_type)
+            messages.success(
+                request, 'FETCH DONE! Got {} result!!'.format(num_result))
             return HttpResponseRedirect('/admin/')
     else:
         form = GamesFetchForm()

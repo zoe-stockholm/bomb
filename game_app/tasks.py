@@ -10,6 +10,7 @@ logger = logging.getLogger(__name__)
 
 
 def fetch_games_by_keywords(keyword, resource_type, page=1):
+    num_result = 0
     headers = {'User-Agent':
                    'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36'}
 
@@ -28,8 +29,10 @@ def fetch_games_by_keywords(keyword, resource_type, page=1):
             game, created = Game.objects.get_or_create(
                 game_id=str(g.get('id')))
             game.update_game(g)
+            num_result += 1
 
             if json.loads(response.text).get('number_of_page_results') > 0:
                 page += 1
                 fetch_games_by_keywords(keyword, resource_type, page)
+    return num_result
 

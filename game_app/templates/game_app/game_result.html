@@ -2,9 +2,10 @@
 
 <hr />
 
+<p align="center"><strong>Find {{ num_result }} results! </strong></p>
 {% for object in object_list %}
 <li>
-    {{ object }} - {{ object.original_release_date|date:"Y"  }} - <a href="{{ object.giant_bomb_site_detail_url }}">Detail Link</a>
+    {{ object }} - Release Year: {{ object.original_release_date|date:"Y"  }} - <a href="{{ object.giant_bomb_site_detail_url }}">Detail Link</a>
 </li>
 {% endfor %}
 
